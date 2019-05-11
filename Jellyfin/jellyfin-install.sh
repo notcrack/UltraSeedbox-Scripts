@@ -15,23 +15,30 @@ then
         exit
 fi
 
-file=$(curl -s "https://repo.jellyfin.org/releases/server/linux/" | grep -oE "jellyfin_([0-9\.]+)\.portable\.tar\.gz" | head -1)
-if [ -z "$file" ]
+archive=$(curl -s "https://repo.jellyfin.org/releases/server/linux/" | grep -oE "jellyfin_([0-9\.]+)\.portable\.tar\.gz" | head -1)
+if [ -z "$archive" ]
 then
 	echo "Error: Unable to download Jellyfin"
 	exit
 fi
 
-cd $HOME
-mkdir jellyfin
-cd jellyfin
+mkdir $HOME/.apps/jellyfin
+cd $HOME/.apps/jellyfin
 
 echo "Downloading Jellyfin..."
-wget -q "https://repo.jellyfin.org/releases/server/linux/$file"
+wget -q "https://repo.jellyfin.org/releases/server/linux/$archive"
+tar --strip-components=1 -zxf $archive
+rm $archive
 
-echo "Extracting Jellyfin..."
-tar --strip-components=1 -zxf $file
-rm $file
+mkdir $HOME/.apps/ffmpeg
+cd $HOME/.apps/ffmpeg
+
+echo "Downloading FFmpeg..."
+curl -s https://api.github.com/repos/jellyfin/jellyfin-ffmpeg/releases/latest | grep "browser_download_url.*bionic_amd64.deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
+dpkg -x $(ls | head -n 1) $HOME/.apps/ffmpeg
+mv $HOME/.apps/ffmpeg/usr/lib/jellyfin-ffmpeg $HOME/.apps
+cd ../
+rm -r ffmpeg
 
 port=$(( 11002 + (($UID - 1000) * 50)))
 
@@ -68,19 +75,22 @@ chmod 755 $HOME/.apps/nginx/proxy.d/jellyfin.conf
 echo "Restarting nginx..."
 app-nginx restart
 
-mkdir $HOME/jellydata
-cd $HOME/jellydata
+mkdir $HOME/.config/jellyfin
+cd $HOME/.config/jellyfin
 mkdir cache config data log
 
 echo "Installing Service..."
 mkdir -p $HOME/.config/systemd/user
 echo "[Unit]
 Description=Jellyfin
+After=network.target
+StartLimitIntervalSec=0
 
 [Service]
-ExecStart=$HOME/jellyfin/jellyfin -d $HOME/jellydata/data -w $HOME/jellyfin/jellyfin-web/src -C $HOME/jellydata/cache -c $HOME/jellydata/config -l $HOME/jellydata/log
-RestartSec=10s
+Type=simple
 Restart=on-failure
+RestartSec=10
+ExecStart=$HOME/.apps/jellyfin/jellyfin -d $HOME/.config/jellyfin/data -w $HOME/.apps/jellyfin/jellyfin-web/src -C $HOME/.config/jellyfin/cache -c $HOME/.config/jellyfin/config -l $HOME/.config/jellyfin/log --ffmpeg=$HOME/.apps/jellyfin-ffmpeg/ffmpeg
 
 [Install]
 WantedBy=default.target" >> $HOME/.config/systemd/user/jellyfin.service
@@ -89,12 +99,12 @@ systemctl --user enable jellyfin
 
 loginctl enable-linger $USER
 
-echo "Updating ports..."
+echo "Updating Ports..."
 systemctl --user start jellyfin
-sleep 10
+sleep 5
+sed -i "s/8096/$port/g" $HOME/.config/jellyfin/config/system.xml
+sed -i 's/<EnableHttps>true<\/EnableHttps>/<EnableHttps>false<\/EnableHttps>/g' $HOME/.config/jellyfin/config/system.xml
 systemctl --user stop jellyfin
-sed -i 's/8096/$port/g' $HOME/jellydata/config/system.xml
-sed -i 's/<EnableHttps>true<\/EnableHttps>/<EnableHttps>false<\/EnableHttps>/g' $HOME/jellydata/config/system.xml
 
 echo "Starting Jellyfin..."
 systemctl --user start jellyfin
