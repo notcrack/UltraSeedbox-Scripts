@@ -18,7 +18,7 @@ do
   line=$(deluge-console "connect '$ip':'$port' '$username' '$password'; info" $1 | grep "Tracker status")
   echo $line >> ~/script.log
   case "$line" in
-    *Error*|*Sent*|*End*of*file*|*Bad*Gateway*)
+    *error*|*Error*|*Sent*|*End*of*file*|*Bad*Gateway*)
       deluge-console "connect '$ip':'$port' '$username' '$password'; pause '$torrentid'"
       sleep 5
       deluge-console "connect '$ip':'$port' '$username' '$password'; resume '$torrentid'"
