@@ -20,4 +20,10 @@ echo "Removing service..."
 rm $HOME/.config/systemd/user/jellyfin.service
 systemctl --user daemon-reload
 
+echo "Cleaning up scripts..."
+
+rm -- "$0"
+rm jellyfin-install.sh
+rm jellyfin-upgrade.sh
+
 echo "Done!"
