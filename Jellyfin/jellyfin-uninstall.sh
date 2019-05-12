@@ -23,7 +23,6 @@ systemctl --user daemon-reload
 echo "Cleaning up scripts..."
 
 rm -- "$0"
-rm -f jellyfin-install.sh
 rm -f jellyfin-upgrade.sh
 
 echo "Done!"
