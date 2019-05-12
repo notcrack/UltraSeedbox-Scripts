@@ -3,7 +3,8 @@ torrentid=$1
 torrentname=$2
 torrentpath=$3
 
-#change all information here to reflect slot specifics
+#Change ip, port, username and password to reflect your specific instance. 
+#Afterwards run 'chmod +x deluge-autoresume.sh' and add it to your execute in Deluge.
 ip=xyz.xyz.xyz.xyz
 port=zzzzz
 username=xxxx
