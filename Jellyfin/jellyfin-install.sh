@@ -30,16 +30,6 @@ wget -q "https://repo.jellyfin.org/releases/server/linux/$archive"
 tar --strip-components=1 -zxf $archive
 rm $archive
 
-mkdir $HOME/.apps/ffmpeg
-cd $HOME/.apps/ffmpeg
-
-echo "Downloading FFmpeg..."
-curl -s https://api.github.com/repos/jellyfin/jellyfin-ffmpeg/releases/latest | grep "browser_download_url.*bionic_amd64.deb" | cut -d : -f 2,3 | tr -d \" | wget -qi -
-dpkg -x $(ls | head -n 1) $HOME/.apps/ffmpeg
-mv $HOME/.apps/ffmpeg/usr/lib/jellyfin-ffmpeg $HOME/.apps
-cd ../
-rm -r ffmpeg
-
 port=$(( 11002 + (($UID - 1000) * 50)))
 
 echo "Updating nginx..."
@@ -79,7 +69,7 @@ mkdir $HOME/.config/jellyfin
 cd $HOME/.config/jellyfin
 mkdir cache config data log
 
-echo "Installing Service..."
+echo "Installing service..."
 mkdir -p $HOME/.config/systemd/user
 echo "[Unit]
 Description=Jellyfin
@@ -90,7 +80,7 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=on-failure
 RestartSec=10
-ExecStart=$HOME/.apps/jellyfin/jellyfin -d $HOME/.config/jellyfin/data -w $HOME/.apps/jellyfin/jellyfin-web/src -C $HOME/.config/jellyfin/cache -c $HOME/.config/jellyfin/config -l $HOME/.config/jellyfin/log --ffmpeg=$HOME/.apps/jellyfin-ffmpeg/ffmpeg
+ExecStart=$HOME/.apps/jellyfin/jellyfin -d $HOME/.config/jellyfin/data -w $HOME/.apps/jellyfin/jellyfin-web/src -C $HOME/.config/jellyfin/cache -c $HOME/.config/jellyfin/config -l $HOME/.config/jellyfin/log
 
 [Install]
 WantedBy=default.target" >> $HOME/.config/systemd/user/jellyfin.service
@@ -99,7 +89,7 @@ systemctl --user enable jellyfin
 
 loginctl enable-linger $USER
 
-echo "Updating Ports..."
+echo "Updating ports..."
 systemctl --user start jellyfin
 sleep 5
 sed -i "s/8096/$port/g" $HOME/.config/jellyfin/config/system.xml
@@ -109,7 +99,7 @@ systemctl --user stop jellyfin
 echo "Starting Jellyfin..."
 systemctl --user start jellyfin
 
-echo "Obtaining uninstall and upgrade scripts..."
+echo "Downloading uninstall and upgrade scripts..."
 cd $HOME
 wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Jellyfin/jellyfin-uninstall.sh
 chmod +x jellyfin-uninstall.sh
