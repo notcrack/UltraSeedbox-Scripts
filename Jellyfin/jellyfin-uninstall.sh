@@ -7,7 +7,6 @@ systemctl --user stop jellyfin
 
 echo "Removing directories..."
 rm -r $HOME/.apps/jellyfin
-rm -r $HOME/.apps/jellyfin-ffmpeg
 rm -r $HOME/.config/jellyfin
 
 echo "Updating nginx..."
