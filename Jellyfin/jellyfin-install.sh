@@ -109,6 +109,6 @@ chmod +x jellyfin-upgrade.sh
 echo "Cleaning up..."
 rm -- "$0"
 
-echo -e "\e[32mDone!"
-echo -e "Access your Jellyfin installation at https://$USER.$(hostname).usbx.me/emby"
-echo -e "Run ./jellyfin-uninstall.sh to uninstall | Run ./jellyfin-upgrade.sh to upgrade" 
+printf "\033[0;31mDone!\033[0m\n"
+echo "Access your Jellyfin installation at https://$USER.$(hostname).usbx.me/emby"
+echo "Run ./jellyfin-uninstall.sh to uninstall | Run ./jellyfin-upgrade.sh to upgrade" 
