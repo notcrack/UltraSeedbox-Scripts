@@ -6,14 +6,9 @@ echo "Stopping Mellow..."
 systemctl --user stop mellow
 
 echo "Removing directories..."
-rm -r $HOME/.apps/nodejs
-rm -r $HOME/.apps/mellow
-
-echo "Updating nginx..."
-rm $HOME/.apps/nginx/proxy.d/mellow.conf
-
-echo "Restarting nginx..."
-app-nginx restart
+rm -rf $HOME/.apps/nodejs
+rm -rf $HOME/.apps/mellow
+sed -i '/export PATH=$PATH:~\/.apps\/nodejs\/bin/d' ~/.bashrc
 
 echo "Removing service..."
 rm $HOME/.config/systemd/user/mellow.service
