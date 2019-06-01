@@ -110,4 +110,4 @@ rm -- "$0"
 
 printf "\033[0;31mDone!\033[0m\n"
 echo "Access your Jellyfin installation at https://$USER.$(hostname).usbx.me/emby"
-echo "Run ./jellyfin-uninstall.sh to uninstall | Run ./jellyfin-upgrade.sh to upgrade" 
+echo "Run ./jellyfin-uninstall.sh to uninstall" 
