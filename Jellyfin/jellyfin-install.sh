@@ -100,12 +100,10 @@ systemctl --user stop jellyfin
 echo "Starting Jellyfin..."
 systemctl --user start jellyfin
 
-echo "Downloading uninstall and upgrade scripts..."
+echo "Downloading uninstall script..."
 cd $HOME
 wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Jellyfin/jellyfin-uninstall.sh
 chmod +x jellyfin-uninstall.sh
-wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Jellyfin/jellyfin-upgrade.sh
-chmod +x jellyfin-upgrade.sh
 
 echo "Cleaning up..."
 rm -- "$0"
