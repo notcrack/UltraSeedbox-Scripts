@@ -50,7 +50,6 @@ loginctl enable-linger $USER
 echo "Updating ports..."
 port=$(( 11000 + (($UID - 1000) * 50) + 30))
 sed -i "s/5060/$port/g" ~/.apps/mellow/src/WebServer.js
-sed -i "s/this.app.get('\//this.app.get('\/mellow\//g" ~/.apps/mellow/src/WebServer.js
 
 echo "Starting Mellow..."
 systemctl --user start mellow
