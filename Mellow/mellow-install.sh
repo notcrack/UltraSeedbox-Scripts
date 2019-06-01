@@ -65,4 +65,4 @@ rm -- "$0"
 ip=$(curl -s "https://ipinfo.io/ip")
 printf "\033[0;31mDone!\033[0m\n"
 echo "Access your Mellow installation at http://$ip:$port"
-echo "Run ./mellow-uninstall.sh to uninstall | Run ./mellow-upgrade.sh to upgrade" 
+echo "Run ./mellow-uninstall.sh to uninstall"
