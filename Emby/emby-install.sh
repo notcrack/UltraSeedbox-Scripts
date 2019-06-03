@@ -77,8 +77,8 @@ location /emby/embywebsocket {
     proxy_set_header X-Forwarded-Proto \$scheme;
     proxy_set_header X-Forwarded-Protocol \$scheme;
     proxy_set_header X-Forwarded-Host \$http_host;
-}" >> $HOME/.apps/nginx/proxy.d/emby.conf
-chmod 755 $HOME/.apps/nginx/proxy.d/emby.conf
+}" >> ~/.apps/nginx/proxy.d/emby.conf
+chmod 755 ~/.apps/nginx/proxy.d/emby.conf
 
 echo "Restarting nginx..."
 app-nginx restart
@@ -87,7 +87,7 @@ mkdir ~/.config/emby
 cd ~/.config/emby
 
 echo "Installing service..."
-mkdir -p $HOME/.config/systemd/user
+mkdir -p ~/.config/systemd/user
 echo "[Unit]
 Description=Emby
 After=network.target
@@ -100,7 +100,7 @@ RestartSec=10
 ExecStart=$HOME/.apps/emby/opt/emby-server/bin/emby-server
 
 [Install]
-WantedBy=default.target" >> $HOME/.config/systemd/user/emby.service
+WantedBy=default.target" >> ~/.config/systemd/user/emby.service
 systemctl --user daemon-reload
 systemctl --user enable emby
 
@@ -109,7 +109,8 @@ loginctl enable-linger $USER
 echo "Updating ports..."
 systemctl --user start emby
 sleep 5
-sed -i "s/8096/$port/g" $HOME/.config/emby/config/system.xml
+sed -i "s/8096/$port/g" ~/.config/emby/config/system.xml
+sed -i "s/8920/$(($port + 1))/g" ~/.config/emby/config/system.xml
 echo '<?xml version="1.0"?>
 <EncodingOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EncodingThreadCount>6</EncodingThreadCount>
@@ -136,7 +137,7 @@ echo "Starting Emby..."
 systemctl --user start emby
 
 echo "Downloading uninstall script..."
-cd $HOME
+cd ~
 wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Emby/emby-uninstall.sh
 chmod +x emby-uninstall.sh
 
