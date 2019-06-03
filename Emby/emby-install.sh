@@ -110,7 +110,7 @@ echo "Updating ports..."
 systemctl --user start emby
 sleep 5
 sed -i "s/8096/$port/g" ~/.config/emby/config/system.xml
-sed -i "s/8920/$(($port + 1))/g" ~/.config/emby/config/system.xml
+sed -i "s/8920/$(($port + 2))/g" ~/.config/emby/config/system.xml
 echo '<?xml version="1.0"?>
 <EncodingOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <EncodingThreadCount>6</EncodingThreadCount>
