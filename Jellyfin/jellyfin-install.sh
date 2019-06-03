@@ -15,20 +15,20 @@ then
         exit
 fi
 
-archive=$(curl -s "https://repo.jellyfin.org/releases/server/linux/" | grep -oE "jellyfin_([0-9\.]+)\.portable\.tar\.gz" | head -1)
-if [ -z "$archive" ]
+release=$(curl -s "https://repo.jellyfin.org/releases/server/linux/" | grep -oE "jellyfin_([0-9\.]+)\.portable\.tar\.gz" | head -1)
+if [ -z "$release" ]
 then
 	echo "Error: Unable to download Jellyfin"
 	exit
 fi
 
-mkdir $HOME/.apps/jellyfin
-cd $HOME/.apps/jellyfin
+mkdir ~/.apps/jellyfin
+cd ~/.apps/jellyfin
 
 echo "Downloading Jellyfin..."
-wget -q "https://repo.jellyfin.org/releases/server/linux/$archive"
-tar --strip-components=1 -zxf $archive
-rm $archive
+wget -q "https://repo.jellyfin.org/releases/server/linux/$release"
+tar --strip-components=1 -zxf $release
+rm $release
 
 port=$(( 11002 + (($UID - 1000) * 50)))
 
@@ -59,14 +59,14 @@ location /emby/embywebsocket {
     proxy_set_header X-Forwarded-Proto \$scheme;
     proxy_set_header X-Forwarded-Protocol \$scheme;
     proxy_set_header X-Forwarded-Host \$http_host;
-}" >> $HOME/.apps/nginx/proxy.d/jellyfin.conf
-chmod 755 $HOME/.apps/nginx/proxy.d/jellyfin.conf
+}" >> ~/.apps/nginx/proxy.d/jellyfin.conf
+chmod 755 ~/.apps/nginx/proxy.d/jellyfin.conf
 
 echo "Restarting nginx..."
 app-nginx restart
 
-mkdir $HOME/.config/jellyfin
-cd $HOME/.config/jellyfin
+mkdir ~/.config/jellyfin
+cd ~/.config/jellyfin
 mkdir cache config data log
 
 echo "Installing service..."
@@ -101,13 +101,13 @@ echo "Starting Jellyfin..."
 systemctl --user start jellyfin
 
 echo "Downloading uninstall script..."
-cd $HOME
+cd ~
 wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Jellyfin/jellyfin-uninstall.sh
 chmod +x jellyfin-uninstall.sh
 
 echo "Cleaning up..."
 rm -- "$0"
 
-printf "\033[0;31mDone!\033[0m\n"
+printf "\033[0;32mDone!\033[0m\n"
 echo "Access your Jellyfin installation at https://$USER.$(hostname).usbx.me/emby"
 echo "Run ./jellyfin-uninstall.sh to uninstall" 
