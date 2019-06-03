@@ -109,6 +109,7 @@ loginctl enable-linger $USER
 echo "Updating ports..."
 systemctl --user start emby
 sleep 5
+systemctl --user stop emby
 sed -i "s/8096/$port/g" ~/.config/emby/config/system.xml
 sed -i "s/8920/$(($port + 2))/g" ~/.config/emby/config/system.xml
 echo '<?xml version="1.0"?>
@@ -131,7 +132,6 @@ echo '<?xml version="1.0"?>
     <string>vc1</string>
   </HardwareDecodingCodecs>
 </EncodingOptions>' > ~/.config/emby/config/encoding.xml
-systemctl --user stop emby
 
 echo "Starting Emby..."
 systemctl --user start emby
