@@ -144,6 +144,6 @@ chmod +x emby-uninstall.sh
 echo "Cleaning up..."
 rm -- "$0"
 
-printf "\033[0;31mDone!\033[0m\n"
+printf "\033[0;32mDone!\033[0m\n"
 echo "Access your Emby installation at https://$USER.$(hostname).usbx.me/emby"
 echo "Run ./emby-uninstall.sh to uninstall"
