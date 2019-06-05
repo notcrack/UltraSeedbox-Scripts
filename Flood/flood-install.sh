@@ -24,7 +24,7 @@ N_PREFIX=$HOME n latest
 echo "Downloading Flood..."
 git clone https://github.com/Flood-UI/flood.git
 
-echo "Configuring Flood"
+echo "Configuring Flood..."
 npm install -g node-gyp
 cd $HOME/flood
 cp config.template.js config.js
