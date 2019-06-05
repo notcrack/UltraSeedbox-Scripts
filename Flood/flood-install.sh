@@ -79,5 +79,5 @@ rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
 echo "Access your Flood installation at https://$USER.$(hostname).usbx.me/flood"
-echo "Use $HOME/.config/rtorrent/socket for"
+echo "Use $HOME/.config/rtorrent/socket for Unix socket"
 echo "Run ./flood-uninstall.sh to uninstall" 
