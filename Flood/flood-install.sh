@@ -1,6 +1,7 @@
 #!/bin/bash
 #USB Flood installer
 #Written by nostyle#0001
+#May or may not have borrowed a lot from Alpha#5000's work.
 
 printf "\033[0;31mDisclaimer: This installer is unofficial and USB staff will not support any issues with it\033[0m\n"
 read -p "Type confirm if you wish to continue: " input
@@ -9,8 +10,7 @@ then
         exit
 fi
 
-userid=$(id -u)
-port=$(( 11000 + (($userid - 1000) * 50)) + 9)
+port=$(( 11009 + (($UID - 1000) * 50)))
 key=$(openssl rand -base64 32)
 
 echo "Installing n + latest node..."
@@ -28,10 +28,10 @@ echo "Configuring Flood..."
 npm install -g node-gyp
 cd $HOME/flood
 cp config.template.js config.js
-sed "s/floodServerHost: '127.0.0.1'/floodServerHost: '0.0.0.0'/" config.js > config.js
-sed "s/floodServerPort: 3000/floodServerPort: $port/" config.js > config.js
-sed "s/baseURI: '/'/baseURI: '/flood'/" config.js > config.js
-sed "s/secret: 'flood'/secret: $key/" config.js > config.js
+sed -i "s/floodServerHost: '127.0.0.1'/floodServerHost: '0.0.0.0'/"
+sed -i "s/floodServerPort: 3000/floodServerPort: $port/"
+sed -i "s/baseURI: '/'/baseURI: '/flood'/"
+sed -i "s/secret: 'flood'/secret: $key/"
 npm install
 npm run build
 
@@ -79,4 +79,5 @@ rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
 echo "Access your Flood installation at https://$USER.$(hostname).usbx.me/flood"
+echo "Use $HOME/.config/rtorrent/socket for"
 echo "Run ./flood-uninstall.sh to uninstall" 
