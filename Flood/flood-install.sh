@@ -11,7 +11,7 @@ then
 fi
 
 port=$(( 11009 + (($UID - 1000) * 50)))
-key=$(openssl rand -base64 32)
+key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
 echo "Installing n + latest node..."
 cd $HOME
@@ -60,7 +60,7 @@ Restart=on-failure
 RestartSec=10
 ExecStart=$HOME/bin/node $HOME/flood/server/bin/start.js
 [Install]
-WantedBy=default.target" >> $HOME/.config/systemd/user/flood.service
+WantedBy=default.target" >> ~/.config/systemd/user/flood.service
 systemctl --user daemon-reload
 systemctl --user enable flood
 
