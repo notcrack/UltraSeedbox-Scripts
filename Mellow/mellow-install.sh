@@ -20,7 +20,7 @@ tar --strip-components=1 -xf $release
 rm $release
 
 echo 'export PATH=$PATH:~/.apps/nodejs/bin' >> ~/.bashrc
-source ~/.bashrc
+export PATH=$PATH:~/.apps/nodejs/bin
 
 echo "Downloading Mellow..."
 git clone -b develop "https://github.com/v0idp/Mellow.git" ~/.apps/mellow
