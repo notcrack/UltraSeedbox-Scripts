@@ -28,10 +28,10 @@ echo "Configuring Flood..."
 npm install -g node-gyp
 cd $HOME/flood
 cp config.template.js config.js
-sed -i "s/floodServerHost: '127.0.0.1'/floodServerHost: '0.0.0.0'/"
-sed -i "s/floodServerPort: 3000/floodServerPort: $port/"
-sed -i "s/baseURI: '/'/baseURI: '/flood'/"
-sed -i "s/secret: 'flood'/secret: $key/"
+sed -i "s/floodServerHost: '127.0.0.1'/floodServerHost: '0.0.0.0'/" config.js
+sed -i "s/floodServerPort: 3000/floodServerPort: $port/" config.js
+sed -i "s/baseURI: '/'/baseURI: '/flood'/" config.js
+sed -i "s/secret: 'flood'/secret: $key/" config.js
 npm install
 npm run build
 
