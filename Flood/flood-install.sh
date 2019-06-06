@@ -34,11 +34,12 @@ sed -i "s/secret: 'flood'/secret: '$secret'/" config.js
 npm install
 npm run build
 
-echo "Configuring nginx..."
+echo "Updating nginx..."
 echo "location /flood/ {
   proxy_pass http://127.0.0.1:11659/;
 }" >> ~/.apps/nginx/proxy.d/flood.conf
 chmod 755 ~/.apps/nginx/proxy.d/flood.conf
+app-nginx restart
 
 echo "Installing Service..."
 echo "[Unit]
@@ -69,9 +70,10 @@ wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Fl
 chmod +x flood-uninstall.sh
 
 echo "Cleaning Up..."
+rm -r ~/.apps/n
 rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
-echo "Access your Flood installation at https://$USER.$(hostname).usbx.me/flood"
+echo "Access your Flood installation at https://$USER.$(hostname).usbx.me/flood/"
 echo "Use \"$HOME/.config/rtorrent/socket\" for Unix Socket"
 echo "Run ./flood-uninstall.sh to uninstall" 
