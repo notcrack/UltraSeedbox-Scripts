@@ -11,54 +11,49 @@ then
 fi
 
 port=$(( 11009 + (($UID - 1000) * 50)))
-key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+secret=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-echo "Installing n + latest node..."
-cd $HOME
+echo "Installing Node..."
+cd ~
 git clone https://github.com/tj/n.git
-cd $HOME/n
+cd n
 PREFIX=$HOME make install
-cd $HOME
-N_PREFIX=$HOME n latest
+N_PREFIX=$HOME/.apps/node n latest
 
-echo "Downloading Flood..."
-git clone https://github.com/Flood-UI/flood.git
+echo 'export PATH=$PATH:~/.apps/node/bin' >> ~/.bashrc
+export PATH=$PATH:~/.apps/node/bin
+
+echo "Installing Flood..."
+git clone https://github.com/Flood-UI/flood.git ~/.apps/flood
 
 echo "Configuring Flood..."
-npm install -g node-gyp
-cd $HOME/flood
+cd ~/.apps/flood
 cp config.template.js config.js
-sed -i "s/floodServerHost: '127.0.0.1'/floodServerHost: '0.0.0.0'/" config.js
 sed -i "s/floodServerPort: 3000/floodServerPort: $port/" config.js
 sed -i "s/baseURI: '\/'/baseURI: '\/flood'/" config.js
-sed -i "s/secret: 'flood'/secret: '$key'/" config.js
+sed -i "s/secret: 'flood'/secret: '$secret'/" config.js
 npm install
 npm run build
 
-echo "Updating nginx..."
-echo "location /flood {
-    # Proxy Flood
-    proxy_pass http://127.0.0.1:$port;
-    proxy_set_header Host \$host;
-    proxy_set_header X-Real-IP \$remote_addr;
-    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto \$scheme;
-    proxy_set_header X-Forwarded-Protocol \$scheme;
-    proxy_set_header X-Forwarded-Host \$http_host;
+echo "Configuring nginx..."
+echo "location /flood/ {
+  proxy_pass http://127.0.0.1:11659/;
 }" >> ~/.apps/nginx/proxy.d/flood.conf
 chmod 755 ~/.apps/nginx/proxy.d/flood.conf
 
-echo "Installing service..."
-mkdir -p $HOME/.config/systemd/user
+echo "Installing Service..."
 echo "[Unit]
 Description=Flood
 After=network.target
 StartLimitIntervalSec=0
+
 [Service]
 Type=simple
 Restart=on-failure
 RestartSec=10
-ExecStart=$HOME/bin/node $HOME/flood/server/bin/start.js
+WorkingDirectory=$HOME/.apps/flood
+ExecStart=$HOME/.apps/node/bin/node $HOME/.apps/flood/server/bin/start.js
+
 [Install]
 WantedBy=default.target" >> ~/.config/systemd/user/flood.service
 systemctl --user daemon-reload
@@ -69,15 +64,15 @@ loginctl enable-linger $USER
 echo "Starting Flood..."
 systemctl --user start flood
 
-echo "Downloading uninstall script..."
+echo "Downloading Uninstaller..."
 cd ~
 wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Flood/flood-uninstall.sh
 chmod +x flood-uninstall.sh
 
-echo "Cleaning up..."
+echo "Cleaning Up..."
 rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
 echo "Access your Flood installation at https://$USER.$(hostname).usbx.me/flood"
-echo "Use $HOME/.config/rtorrent/socket for Unix socket"
+echo "Use \"$HOME/.config/rtorrent/socket\" for Unix Socket"
 echo "Run ./flood-uninstall.sh to uninstall" 
