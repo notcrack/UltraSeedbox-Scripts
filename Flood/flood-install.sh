@@ -14,9 +14,8 @@ port=$(( 11009 + (($UID - 1000) * 50)))
 secret=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
 echo "Installing Node..."
-cd ~
-git clone https://github.com/tj/n.git
-cd n
+git clone https://github.com/tj/n.git ~/.apps/n
+cd ~/.apps/n
 PREFIX=$HOME make install
 N_PREFIX=$HOME/.apps/node n latest
 
