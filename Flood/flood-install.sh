@@ -1,7 +1,7 @@
 #!/bin/bash
 #USB Flood installer
 #Written by nostyle#0001
-#May or may not have borrowed a lot from Alpha#5000's work.
+#Fixed by Alpha#5000
 
 printf "\033[0;31mDisclaimer: This installer is unofficial and USB staff will not support any issues with it\033[0m\n"
 read -p "Type confirm if you wish to continue: " input
@@ -17,10 +17,9 @@ echo "Installing Node..."
 git clone https://github.com/tj/n.git ~/.apps/n
 cd ~/.apps/n
 PREFIX=$HOME make install
-N_PREFIX=$HOME/.apps/node n latest
-
 echo 'export PATH=$PATH:~/.apps/node/bin' >> ~/.bashrc
 export PATH=$PATH:~/.apps/node/bin
+N_PREFIX=$HOME/.apps/node n latest
 
 echo "Installing Flood..."
 git clone https://github.com/Flood-UI/flood.git ~/.apps/flood
@@ -70,10 +69,10 @@ wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Fl
 chmod +x flood-uninstall.sh
 
 echo "Cleaning Up..."
-rm -r ~/.apps/n
+rm -rf ~/.apps/n
 rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
 echo "Access your Flood installation at https://$USER.$(hostname).usbx.me/flood/"
-echo "Use \"$HOME/.config/rtorrent/socket\" for Unix Socket"
+echo "Use \"$HOME/.config/rtorrent/socket\" for rTorrent Socket"
 echo "Run ./flood-uninstall.sh to uninstall" 
