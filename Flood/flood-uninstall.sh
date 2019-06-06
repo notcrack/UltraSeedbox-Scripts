@@ -6,10 +6,15 @@ echo "Stopping Flood..."
 systemctl --user stop flood
 
 echo "Removing Files..."
-rm -rf ~/bin/n
-rm -rf ~/.apps/node
 rm -rf ~/.apps/flood
-sed -i '/export PATH=$PATH:~\/.apps\/node\/bin/d' ~/.bashrc
+
+read -p "Uninstall NodeJS? (y/n) " input
+if [ "$input" = "y" ]
+then
+    rm -rf ~/bin/n
+    rm -rf ~/.apps/node
+    sed -i '/export PATH=$PATH:~\/.apps\/node\/bin/d' ~/.bashrc
+fi
 
 echo "Restoring nginx..."
 rm -rf ~/.apps/nginx/proxy.d/flood.conf
