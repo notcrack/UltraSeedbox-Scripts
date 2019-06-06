@@ -13,13 +13,19 @@ fi
 port=$(( 11009 + (($UID - 1000) * 50)))
 secret=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-echo "Installing Node..."
-git clone https://github.com/tj/n.git ~/.apps/n
-cd ~/.apps/n
-PREFIX=$HOME make install
-echo 'export PATH=$PATH:~/.apps/node/bin' >> ~/.bashrc
-export PATH=$PATH:~/.apps/node/bin
-N_PREFIX=$HOME/.apps/node n latest
+if [ ! -f "$HOME/bin/n" ]
+then
+    echo "Installing Node..."
+    git clone https://github.com/tj/n.git ~/.apps/n
+    cd ~/.apps/n
+    PREFIX=$HOME make install
+    export PATH=$PATH:~/.apps/node/bin
+    N_PREFIX=$HOME/.apps/node n latest
+    cd ~/.apps && rm -rf n
+    echo 'export PATH=$PATH:~/.apps/node/bin' >> ~/.bashrc
+else
+    echo "Node already installed. Skipping..."
+fi
 
 echo "Installing Flood..."
 git clone https://github.com/Flood-UI/flood.git ~/.apps/flood
@@ -69,7 +75,6 @@ wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Fl
 chmod +x flood-uninstall.sh
 
 echo "Cleaning Up..."
-rm -rf ~/.apps/n
 rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
