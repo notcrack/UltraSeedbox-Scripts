@@ -13,7 +13,9 @@ then
     read -p "Uninstall Node? (y/n) " input
     if [ "$input" = "y" ]
     then
-        rm -rf ~/.nvm
+        nvm uninstall 12
+        nvm alias default node
+        nvm use default
     fi
 fi
 
