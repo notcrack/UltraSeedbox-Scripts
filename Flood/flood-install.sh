@@ -13,7 +13,7 @@ fi
 PORT=$(( 11009 + (($UID - 1000) * 50)))
 SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-if [ ! -f "$HOME/.nvm" ]
+if [ -f "$HOME/.nvm" ]
 then
     echo "Installing Node..."
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
@@ -33,15 +33,15 @@ git clone https://github.com/Flood-UI/flood.git ~/.apps/flood
 echo "Configuring Flood..."
 cd ~/.apps/flood
 cp config.template.js config.js
-sed -i "s/floodServerPort: 3000/floodServerPort: $port/" config.js
+sed -i "s/floodServerPort: 3000/floodServerPort: $PORT/" config.js
 sed -i "s/baseURI: '\/'/baseURI: '\/flood'/" config.js
-sed -i "s/secret: 'flood'/secret: '$secret'/" config.js
+sed -i "s/secret: 'flood'/secret: '$SECRET'/" config.js
 npm install
 npm run build
 
 echo "Updating nginx..."
 echo "location /flood/ {
-  proxy_pass http://127.0.0.1:$port/;
+  proxy_pass http://127.0.0.1:$PORT/;
 }" >> ~/.apps/nginx/proxy.d/flood.conf
 chmod 755 ~/.apps/nginx/proxy.d/flood.conf
 app-nginx restart
@@ -57,7 +57,7 @@ Type=simple
 Restart=on-failure
 RestartSec=10
 WorkingDirectory=$HOME/.apps/flood
-ExecStart=$NODE $HOME/.apps/flood/server/bin/start.js
+ExecStart=$(which node) $HOME/.apps/flood/server/bin/start.js
 
 [Install]
 WantedBy=default.target" >> ~/.config/systemd/user/flood.service
