@@ -8,14 +8,12 @@ systemctl --user stop flood
 echo "Removing Files..."
 rm -rf ~/.apps/flood
 
-if [ "$(which node)" = "$HOME/.apps/node/bin/node" ]
+if [ ! -f "$HOME/.nvm" ]
 then
-    read -p "Uninstall NodeJS? (y/n) " input
+    read -p "Uninstall Node? (y/n) " input
     if [ "$input" = "y" ]
     then
-        rm -rf ~/bin/n
-        rm -rf ~/.apps/node
-        sed -i '/export PATH=$PATH:~\/.apps\/node\/bin/d' ~/.bashrc
+        rm -rf ~/.nvm
     fi
 fi
 
