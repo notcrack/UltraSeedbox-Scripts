@@ -9,6 +9,7 @@ then
         exit
 fi 
 
+IP=$(curl -s "https://ipinfo.io/ip")
 PORT=$(( 11000 + (($UID - 1000) * 50) + 30))
 
 if [ ! -d "$HOME/.nvm" ]
@@ -31,7 +32,7 @@ cd ~/.apps/mellow
 npm install --loglevel=silent
 
 echo "Configuring Mellow..."
-sed -i "s/5060/$port/g" ~/.apps/mellow/src/WebServer.js
+sed -i "s/5060/$PORT/g" ~/.apps/mellow/src/WebServer.js
 
 echo "Installing Service..."
 echo "[Unit]
@@ -64,7 +65,6 @@ chmod +x mellow-uninstall.sh
 echo "Cleaning Up..."
 rm -- "$0"
 
-ip=$(curl -s "https://ipinfo.io/ip")
 printf "\033[0;32mDone!\033[0m\n"
-echo "Access your Mellow installation at http://$ip:$port"
+echo "Access your Mellow installation at http://$IP:$PORT"
 echo "Run ./mellow-uninstall.sh to uninstall"
