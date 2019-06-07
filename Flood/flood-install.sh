@@ -10,7 +10,7 @@ then
         exit
 fi
 
-PORT=$(( 11009 + (($UID - 1000) * 50)))
+PORT=$(( 11000 + (($UID - 1000) * 50) + 9))
 SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
 if [ ! -d "$HOME/.nvm" ]
@@ -36,7 +36,7 @@ cp config.template.js config.js
 sed -i "s/floodServerPort: 3000/floodServerPort: $PORT/" config.js
 sed -i "s/baseURI: '\/'/baseURI: '\/flood'/" config.js
 sed -i "s/secret: 'flood'/secret: '$SECRET'/" config.js
-npm install
+npm install --loglevel=silent
 npm run build
 
 echo "Updating nginx..."
