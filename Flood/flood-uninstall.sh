@@ -8,7 +8,7 @@ systemctl --user stop flood
 echo "Removing Files..."
 rm -rf ~/.apps/flood
 
-if [ ! -f "$HOME/.nvm" ]
+if [ -d "$HOME/.nvm" ]
 then
     read -p "Uninstall Node? (y/n) " input
     if [ "$input" = "y" ]
