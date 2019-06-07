@@ -31,7 +31,7 @@ rm -rf ~/.apps/nginx/proxy.d/flood.conf
 app-nginx restart
 
 echo "Removing Service..."
-rm $HOME/.config/systemd/user/flood.service
+rm ~/.config/systemd/user/flood.service
 systemctl --user daemon-reload
 
 echo "Cleaning Up..."
