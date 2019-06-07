@@ -22,7 +22,7 @@ then
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
     nvm install 12 --latest-npm
     nvm alias default 12
-    nvm use 12
+    nvm use default
 else
     echo "Node already installed. Skipping..."
 fi
