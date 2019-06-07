@@ -5,18 +5,33 @@
 echo "Stopping Mellow..."
 systemctl --user stop mellow
 
-echo "Removing directories..."
-rm -rf $HOME/.apps/nodejs
-rm -rf $HOME/.apps/mellow
-sed -i '/export PATH=$PATH:~\/.apps\/nodejs\/bin/d' ~/.bashrc
+echo "Removing Files..."
+rm -rf ~/.apps/mellow
 
-echo "Removing service..."
-rm $HOME/.config/systemd/user/mellow.service
+if [ -d "$HOME/.nvm" ]
+then
+    read -p "Uninstall Node? (y/n) " input
+    if [ "$input" = "y" ]
+    then
+        if [ -z "$(which nvm)" ]
+        then
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+        fi
+        nvm deactivate
+        nvm uninstall 12
+        nvm alias default system
+        nvm use default
+    fi
+fi
+
+echo "Removing Service..."
+rm ~/.config/systemd/user/mellow.service
 systemctl --user daemon-reload
 
-echo "Cleaning up scripts..."
+echo "Cleaning Up..."
 
 rm -- "$0"
-rm -f mellow-upgrade.sh
 
 echo "Done!"
