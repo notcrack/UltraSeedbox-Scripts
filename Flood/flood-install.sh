@@ -13,7 +13,7 @@ fi
 PORT=$(( 11009 + (($UID - 1000) * 50)))
 SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-if [ -f "$HOME/.nvm" ]
+if [ ! -d "$HOME/.nvm" ]
 then
     echo "Installing Node..."
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
