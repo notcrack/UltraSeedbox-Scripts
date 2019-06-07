@@ -10,19 +10,23 @@ then
         exit
 fi
 
-port=$(( 11009 + (($UID - 1000) * 50)))
-secret=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+NODE=$(which node)
+PORT=$(( 11009 + (($UID - 1000) * 50)))
+SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-if [ ! -f "$HOME/bin/n" ]
+if [ -z "$NODE" ]
 then
     echo "Installing Node..."
+    export PATH=$PATH:~/.apps/node/bin
+    echo 'export PATH=$PATH:~/.apps/node/bin' >> ~/.bashrc
+    
     git clone https://github.com/tj/n.git ~/.apps/n
     cd ~/.apps/n
     PREFIX=$HOME make install
-    export PATH=$PATH:~/.apps/node/bin
     N_PREFIX=$HOME/.apps/node n latest
     cd ~/.apps && rm -rf n
-    echo 'export PATH=$PATH:~/.apps/node/bin' >> ~/.bashrc
+    
+    $NODE=$(which node)
 else
     echo "Node already installed. Skipping..."
 fi
@@ -57,7 +61,7 @@ Type=simple
 Restart=on-failure
 RestartSec=10
 WorkingDirectory=$HOME/.apps/flood
-ExecStart=$HOME/.apps/node/bin/node $HOME/.apps/flood/server/bin/start.js
+ExecStart=$NODE $HOME/.apps/flood/server/bin/start.js
 
 [Install]
 WantedBy=default.target" >> ~/.config/systemd/user/flood.service
