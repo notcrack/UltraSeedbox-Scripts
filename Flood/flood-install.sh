@@ -10,23 +10,18 @@ then
         exit
 fi
 
-NODE=$(which node)
 PORT=$(( 11009 + (($UID - 1000) * 50)))
 SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
-if [ -z "$NODE" ]
+if [ ! -f "$HOME/.nvm" ]
 then
     echo "Installing Node..."
-    export PATH=$PATH:~/.apps/node/bin
-    echo 'export PATH=$PATH:~/.apps/node/bin' >> ~/.bashrc
-    
-    git clone https://github.com/tj/n.git ~/.apps/n
-    cd ~/.apps/n
-    PREFIX=$HOME make install
-    N_PREFIX=$HOME/.apps/node n latest
-    cd ~/.apps && rm -rf n
-    
-    $NODE=$(which node)
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm install 12 --latest-npm
+    nvm use 12
 else
     echo "Node already installed. Skipping..."
 fi
@@ -84,4 +79,4 @@ rm -- "$0"
 printf "\033[0;32mDone!\033[0m\n"
 echo "Access your Flood installation at https://$USER.$(hostname).usbx.me/flood/"
 echo "Use \"$HOME/.config/rtorrent/socket\" for rTorrent Socket"
-echo "Run ./flood-uninstall.sh to uninstall" 
+echo "Run ./flood-uninstall.sh to uninstall"
