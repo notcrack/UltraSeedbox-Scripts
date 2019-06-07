@@ -41,7 +41,7 @@ npm run build
 
 echo "Updating nginx..."
 echo "location /flood/ {
-  proxy_pass http://127.0.0.1:11659/;
+  proxy_pass http://127.0.0.1:$port/;
 }" >> ~/.apps/nginx/proxy.d/flood.conf
 chmod 755 ~/.apps/nginx/proxy.d/flood.conf
 app-nginx restart
