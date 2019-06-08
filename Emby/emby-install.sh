@@ -15,6 +15,12 @@ then
         exit
 fi
 
+if [ -d "$HOME/.apps/jellyfin" ]
+then
+        echo "Error: Jellyfin is already installed"
+        exit
+fi
+
 PORT=$(( 11000 + (($UID - 1000) * 50) + 2))
 
 mkdir ~/.apps/emby
