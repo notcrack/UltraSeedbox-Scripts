@@ -15,7 +15,7 @@ then
         exit
 fi
 
-if [ -d "$HOME/.apps/jellyfin" ]
+if [ -d "$HOME/.apps/emby" ]
 then
         echo "Error: Emby is already installed"
         exit
