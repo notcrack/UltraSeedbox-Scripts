@@ -17,7 +17,7 @@ echo "Removing Service..."
 rm $HOME/.config/systemd/user/jellyfin.service
 systemctl --user daemon-reload
 
-echo "Cleaning up..."
+echo "Cleaning Up..."
 
 rm -- "$0"
 
