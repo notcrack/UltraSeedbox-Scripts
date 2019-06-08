@@ -79,7 +79,7 @@ RestartSec=10
 ExecStart=$HOME/.apps/jellyfin/jellyfin -d $HOME/.config/jellyfin/data -w $HOME/.apps/jellyfin/jellyfin-web/src -C $HOME/.config/jellyfin/cache -c $HOME/.config/jellyfin/config -l $HOME/.config/jellyfin/log
 
 [Install]
-WantedBy=default.target" >> $HOME/.config/systemd/user/jellyfin.service
+WantedBy=default.target" >> ~/.config/systemd/user/jellyfin.service
 systemctl --user daemon-reload
 systemctl --user enable jellyfin
 
