@@ -15,6 +15,12 @@ then
         exit
 fi
 
+if [ -d "$HOME/.apps/jellyfin" ]
+then
+        echo "Error: Emby is already installed"
+        exit
+fi
+
 RELEASE=$(curl -s "https://repo.jellyfin.org/releases/server/linux/" | grep -oE "jellyfin_([0-9\.]+)\.portable\.tar\.gz" | head -1)
 PORT=$(( 11000 + (($UID - 1000) * 50) + 2))
 
