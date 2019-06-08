@@ -102,14 +102,16 @@ sed -i 's/-1/6/g' $HOME/.config/jellyfin/config/encoding.xml
 echo "Starting Jellyfin..."
 systemctl --user start jellyfin
 
-echo "Downloading Uninstaller..."
+echo "Downloading Scripts..."
 cd ~
 wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Jellyfin/jellyfin-uninstall.sh
 chmod +x jellyfin-uninstall.sh
+wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Jellyfin/jellyfin-upgrade.sh
+chmod +x jellyfin-upgrade.sh
 
 echo "Cleaning Up..."
 rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
 echo "Access your Jellyfin installation at https://$USER.$(hostname).usbx.me/emby"
-echo "Run ./jellyfin-uninstall.sh to uninstall" 
+echo "Run ./jellyfin-uninstall.sh to uninstall | Run ./jellyfin-upgrade.sh to upgrade" 
