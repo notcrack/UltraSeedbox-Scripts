@@ -15,14 +15,16 @@ then
         exit
 fi
 
+PORT=$(( 11000 + (($UID - 1000) * 50) + 2))
+
 mkdir ~/.apps/emby
 cd ~/.apps/emby
 
-echo "Downloading Emby..."
+echo "Installing Emby..."
 wget -q $(curl -s https://api.github.com/repos/MediaBrowser/Emby.Releases/releases/latest | grep 'browser_' | cut -d\" -f4 | head -n 5 | tail -n 1)
-release=$(ls | head -n 1)
-dpkg -x $release ~/.apps/emby
-rm $release
+RELEASE=$(ls | head -n 1)
+dpkg -x $RELEASE ~/.apps/emby
+rm $RELEASE
 
 echo $'#!/bin/sh
 
@@ -47,8 +49,6 @@ exec $APP_DIR/system/EmbyServer \
   -ffprobe $APP_DIR/bin/ffprobe \
   -restartexitcode 3 \
   -updatepackage \'emby-server-deb_{version}_amd64.deb\'' > ~/.apps/emby/opt/emby-server/bin/emby-server
-
-port=$(( 11000 + (($UID - 1000) * 50) + 2))
 
 echo "Updating nginx..."
 echo "location /emby {
@@ -86,7 +86,7 @@ app-nginx restart
 mkdir ~/.config/emby
 cd ~/.config/emby
 
-echo "Installing service..."
+echo "Installing Service..."
 mkdir -p ~/.config/systemd/user
 echo "[Unit]
 Description=Emby
@@ -106,7 +106,7 @@ systemctl --user enable emby
 
 loginctl enable-linger $USER
 
-echo "Updating ports..."
+echo "Configuring Emby..."
 systemctl --user start emby
 sleep 5
 systemctl --user stop emby
@@ -136,12 +136,12 @@ echo '<?xml version="1.0"?>
 echo "Starting Emby..."
 systemctl --user start emby
 
-echo "Downloading uninstall script..."
+echo "Downloading Uninstaller..."
 cd ~
 wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Emby/emby-uninstall.sh
 chmod +x emby-uninstall.sh
 
-echo "Cleaning up..."
+echo "Cleaning Up..."
 rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
