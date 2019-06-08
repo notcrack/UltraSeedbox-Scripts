@@ -5,17 +5,15 @@
 echo "Stopping Jellyfin..."
 systemctl --user stop jellyfin
 
-echo "Removing directories..."
+echo "Removing Files..."
 rm -r $HOME/.apps/jellyfin
 rm -r $HOME/.config/jellyfin
 
-echo "Updating nginx..."
+echo "Restoring nginx..."
 rm $HOME/.apps/nginx/proxy.d/jellyfin.conf
-
-echo "Restarting nginx..."
 app-nginx restart
 
-echo "Removing service..."
+echo "Removing Service..."
 rm $HOME/.config/systemd/user/jellyfin.service
 systemctl --user daemon-reload
 
