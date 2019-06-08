@@ -15,8 +15,10 @@ then
         exit
 fi
 
-release=$(curl -s "https://repo.jellyfin.org/releases/server/linux/" | grep -oE "jellyfin_([0-9\.]+)\.portable\.tar\.gz" | head -1)
-if [ -z "$release" ]
+RELEASE=$(curl -s "https://repo.jellyfin.org/releases/server/linux/" | grep -oE "jellyfin_([0-9\.]+)\.portable\.tar\.gz" | head -1)
+PORT=$(( 11000 + (($UID - 1000) * 50) + 2))
+
+if [ -z "$RELEASE" ]
 then
 	echo "Error: Unable to download Jellyfin"
 	exit
@@ -25,34 +27,28 @@ fi
 mkdir ~/.apps/jellyfin
 cd ~/.apps/jellyfin
 
-echo "Downloading Jellyfin..."
-wget -q "https://repo.jellyfin.org/releases/server/linux/$release"
-tar --strip-components=1 -zxf $release
-rm $release
-
-port=$(( 11002 + (($UID - 1000) * 50)))
+echo "Installing Jellyfin..."
+wget -q "https://repo.jellyfin.org/releases/server/linux/$RELEASE"
+tar --strip-components=1 -zxf $RELEASE
+rm $RELEASE
 
 echo "Updating nginx..."
 echo "location /emby {
-    # Proxy main Jellyfin traffic
-    proxy_pass http://127.0.0.1:$port;
+    proxy_pass http://127.0.0.1:$PORT;
     proxy_set_header Host \$host;
     proxy_set_header X-Real-IP \$remote_addr;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto \$scheme;
     proxy_set_header X-Forwarded-Protocol \$scheme;
     proxy_set_header X-Forwarded-Host \$http_host;
-
-    # Disable buffering when the nginx proxy gets very resource heavy upon streaming
     proxy_buffering off;
 }
 
 location /emby/embywebsocket {
-    # Proxy Jellyfin Websockets traffic
-    proxy_pass http://127.0.0.1:$port;
+    proxy_pass http://127.0.0.1:$PORT;
     proxy_http_version 1.1;
     proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection "upgrade";
+    proxy_set_header Connection \"upgrade\";
     proxy_set_header Host \$host;
     proxy_set_header X-Real-IP \$remote_addr;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
@@ -69,7 +65,7 @@ mkdir ~/.config/jellyfin
 cd ~/.config/jellyfin
 mkdir cache config data log
 
-echo "Installing service..."
+echo "Installing Service..."
 mkdir -p $HOME/.config/systemd/user
 echo "[Unit]
 Description=Jellyfin
@@ -89,7 +85,7 @@ systemctl --user enable jellyfin
 
 loginctl enable-linger $USER
 
-echo "Updating ports..."
+echo "Configuring Jellyfin..."
 systemctl --user start jellyfin
 sleep 5
 systemctl --user stop jellyfin
@@ -100,12 +96,12 @@ sed -i 's/-1/6/g' $HOME/.config/jellyfin/config/encoding.xml
 echo "Starting Jellyfin..."
 systemctl --user start jellyfin
 
-echo "Downloading uninstall script..."
+echo "Downloading Uninstaller..."
 cd ~
 wget -q https://raw.githubusercontent.com/no5tyle/UltraSeedbox-Scripts/master/Jellyfin/jellyfin-uninstall.sh
 chmod +x jellyfin-uninstall.sh
 
-echo "Cleaning up..."
+echo "Cleaning Up..."
 rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
