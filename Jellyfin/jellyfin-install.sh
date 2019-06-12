@@ -95,7 +95,7 @@ echo "Configuring Jellyfin..."
 systemctl --user start jellyfin
 sleep 5
 systemctl --user stop jellyfin
-sed -i "s/8096/$port/g" $HOME/.config/jellyfin/config/system.xml
+sed -i "s/8096/$PORT/g" $HOME/.config/jellyfin/config/system.xml
 sed -i 's/<EnableHttps>true<\/EnableHttps>/<EnableHttps>false<\/EnableHttps>/g' $HOME/.config/jellyfin/config/system.xml
 sed -i 's/-1/6/g' $HOME/.config/jellyfin/config/encoding.xml
 
