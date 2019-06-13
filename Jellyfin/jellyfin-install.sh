@@ -106,5 +106,5 @@ echo "Cleaning Up..."
 rm -- "$0"
 
 printf "\033[0;32mDone!\033[0m\n"
-echo "Access your Jellyfin installation at https://$USER.$(hostname).usbx.me/emby"
+echo "Access your Jellyfin installation at https://$USER.$(hostname).usbx.me/jellyfin"
 echo "Run ./jellyfin-uninstall.sh to uninstall | Run ./jellyfin-upgrade.sh to upgrade" 
