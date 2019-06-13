@@ -39,28 +39,21 @@ tar --strip-components=1 -zxf $RELEASE
 rm $RELEASE
 
 echo "Updating nginx..."
-echo "location /emby {
-    proxy_pass http://127.0.0.1:$PORT;
-    proxy_set_header Host \$host;
-    proxy_set_header X-Real-IP \$remote_addr;
-    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto \$scheme;
-    proxy_set_header X-Forwarded-Protocol \$scheme;
-    proxy_set_header X-Forwarded-Host \$http_host;
-    proxy_buffering off;
-}
+echo "location ^~ /jellyfin/ {
+    proxy_pass http://127.0.0.1:$PORT/;
 
-location /emby/embywebsocket {
-    proxy_pass http://127.0.0.1:$PORT;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection \"upgrade\";
+    proxy_pass_request_headers on;
+
     proxy_set_header Host \$host;
+
     proxy_set_header X-Real-IP \$remote_addr;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto \$scheme;
     proxy_set_header X-Forwarded-Protocol \$scheme;
     proxy_set_header X-Forwarded-Host \$http_host;
+
+    proxy_set_header Upgrade \$http_upgrade;
+    proxy_set_header Connection \$http_connection;
 }" >> ~/.apps/nginx/proxy.d/jellyfin.conf
 chmod 755 ~/.apps/nginx/proxy.d/jellyfin.conf
 
