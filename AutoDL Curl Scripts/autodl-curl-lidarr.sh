@@ -6,5 +6,5 @@ apiKey=$3
 date=$(date -u +"%Y-%m-%d %H:%M:%SZ")
 
 {
-/usr/bin/curl -i -H "Accept: application/json" -H "Content-Type: application/json" -H "X-Api-Key: $apiKey" -X POST -d '{"title":"'"$title"'","downloadUrl":"'"$downloadUrl"'","Protocol":"torrent","publishDate":"'"$date"'"}' http://lwxxx.usbx.me:xxxxx/api/v1/release/push
+$(which curl) -i -H "Accept: application/json" -H "Content-Type: application/json" -H "X-Api-Key: $apiKey" -X POST -d '{"title":"'"$title"'","downloadUrl":"'"$downloadUrl"'","Protocol":"torrent","publishDate":"'"$date"'"}' http://lwxxx.usbx.me:xxxxx/api/v1/release/push
 } &> /dev/null
