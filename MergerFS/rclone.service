@@ -1,0 +1,25 @@
+[Unit]
+Description=RClone Service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=notify
+Environment=RCLONE_CONFIG=/homexx/kbguides/.config/rclone/rclone.conf
+
+ExecStart=/homexx/kbguides/bin/rclone mount gdrive: homexx/kbguides/Stuff/Mount \
+--allow-other \
+--buffer-size 256M \
+--dir-cache-time 96h \
+--log-level INFO \
+--log-file /homexx/kbguides/scripts/rclone.log \
+--timeout 1h \
+--umask 002 \
+--vfs-cache-mode writes \
+--vfs-read-chunk-size 128M \
+--vfs-read-chunk-size-limit off
+ExecStop=/bin/fusermount -uz /homexx/kbguides/Stuff/Mount
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
