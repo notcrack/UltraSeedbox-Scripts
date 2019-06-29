@@ -7,7 +7,7 @@ After=network-online.target
 Type=notify
 Environment=RCLONE_CONFIG=/homexx/yyyyy/.config/rclone/rclone.conf
 
-ExecStart=/homexx/yyyyy/bin/rclone mount gdrive: homexx/kbguides/Stuff/Mount \
+ExecStart=/homexx/yyyyy/bin/rclone mount gdrive: /homexx/kbguides/Stuff/Mount \
 --allow-other \
 --buffer-size 256M \
 --dir-cache-time 96h \
