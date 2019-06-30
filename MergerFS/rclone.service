@@ -10,6 +10,8 @@ Environment=RCLONE_CONFIG=/homexx/yyyyy/.config/rclone/rclone.conf
 ExecStart=/homexx/yyyyy/bin/rclone mount gdrive: /homexx/kbguides/Stuff/Mount \
 --allow-other \
 --buffer-size 256M \
+--drive-chunk-size 32M \
+--fast-list \
 --dir-cache-time 96h \
 --log-level INFO \
 --log-file /homexx/kbguides/scripts/rclone.log \
