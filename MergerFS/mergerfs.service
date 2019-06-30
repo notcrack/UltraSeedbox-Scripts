@@ -4,7 +4,7 @@ After=rclone.service
 
 [Service]
 Type=forking
-ExecStart=/homexx/yyyyy/.local/bin/mergerfs -o async_read=false,use_ino,allow_other,auto_cache,func.getattr=newest,category.action=all,category.create=ff /homexx/yyyyy/Stuff/Local:/homexx/yyyyy/Stuff/Mount /homexx/yyyyy/MergerFS
+ExecStart=/homexx/yyyyy/.local/bin/mergerfs -o async_read=false,use_ino,allow_other,auto_cache,func.getattr=newest,category.action=all,category.create=ff,threads=12 /homexx/yyyyy/Stuff/Local:/homexx/yyyyy/Stuff/Mount /homexx/yyyyy/MergerFS
 ExecStop=/bin/fusermount -uz /homexx/yyyyy/MergerFS
 Restart=on-failure
 
