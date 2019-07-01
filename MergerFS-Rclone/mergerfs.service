@@ -1,6 +1,6 @@
 [Unit]
 Description = MergerFS Mount
-After=rclone.service
+After=rclone-vfs.service
 
 [Service]
 Type=forking
