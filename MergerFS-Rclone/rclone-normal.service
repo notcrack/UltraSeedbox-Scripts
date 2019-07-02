@@ -1,7 +1,5 @@
 [Unit]
 Description=RClone Service
-Wants=network-online.target
-After=network-online.target
 
 [Service]
 Type=notify
@@ -9,7 +7,6 @@ Environment=RCLONE_CONFIG=/homexx/yyyyy/.config/rclone/rclone.conf
 
 ExecStart=/homexx/yyyyy/bin/rclone mount gdrive: /homexx/yyyyy/Mount \
   --allow-other \
-  --buffer-size 256M \
   --fast-list \
   --drive-chunk-size 128M \
   --dir-cache-time 96h \
