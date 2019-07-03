@@ -5,4 +5,6 @@ wget -O rclone-current-linux-amd64.zip https://downloads.rclone.org/rclone-curre
 unzip rclone-current-linux-amd64.zip
 cp rclone-v*/rclone ~/bin
 cd ~
+rm -rfv ~/.rclone-tmp
 which rclone
+rclone version
