@@ -5,3 +5,4 @@ dpkg -x ~/tmp/mergerfs_2.28.1.debian-stretch_amd64.deb ~/tmp
 mv ~/tmp/usr/bin/* ~/.local/bin
 rm -rf ~/tmp
 which mergerfs
+mergerfs -v
